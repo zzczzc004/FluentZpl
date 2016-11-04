@@ -16,5 +16,15 @@
         {
             return new GraphicBoxGenerator();
         }
+
+        public static StringGraphicGenerator GetStringGraphic()
+        {
+            return new StringGraphicGenerator();
+        }
+
+        public static NativeZplGenerator GetNativeZplGenerator()
+        {
+            return new NativeZplGenerator();
+        }
     }
 }

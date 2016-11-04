@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Net;
 using NUnit.Framework;
 
@@ -11,7 +12,7 @@ namespace ZebraTests
     public class TestLabelOutput
     {
         private ZplLabel _label;
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void SetUpForAllTests()
         {
 
@@ -34,12 +35,30 @@ namespace ZebraTests
                 FieldGenFactory.GetText().At(1, 1050).SetFont("D", FieldOrientation.Normal, 72).WithData("Serial/Lot Number").Centered(1200).Underline(),
                 FieldGenFactory.GetBarcode().At(1, 1120).SetBarcodeType(BarcodeType.Code128).SetFont("D", FieldOrientation.Normal, 48).WithData("10000000006898").BarWidth(4).Height(110).Centered(1200),
                 FieldGenFactory.GetText().At(1, 1320).SetFont("D", FieldOrientation.Inverted, 64).WithData("QTY").Centered(1200),
-                FieldGenFactory.GetBarcode().At(1, 1400).SetBarcodeType(BarcodeType.Code128).SetFont("D", FieldOrientation.Inverted, 72).WithData("10").BarWidth(4).Height(150).Centered(1200)
-                ).At(1, 50).ToString();
+                FieldGenFactory.GetBarcode().At(1, 1400).SetBarcodeType(BarcodeType.Code128).SetFont("D", FieldOrientation.Inverted, 72).WithData("10").BarWidth(4).Height(150).Centered(1200),
+                FieldGenFactory.GetStringGraphic().At(1, 1800).WithData("中文测试").Centered(1200).SetFont(new Font("宋体", 72))
+                ).ToString();
             Console.Write(str); 
             var addr = new byte[] { 1, 0, 0, 127 };
-            var conn = new PrinterConnection();
-            conn.Print(str,  new IPAddress(addr));
+            var conn = new NetworkPrinter();
+            conn.Print(new IPAddress(addr), str);
+        }
+
+        [Test]
+        public void print_chinese_lable_script()
+        {
+            var _labelWidth = 240; //30mm*8
+            var zpl = _label.Load(
+                    FieldGenFactory.GetStringGraphic()
+                        .At(0, 10)
+                        .WithData("中文测试")
+                        .Centered(_labelWidth)
+                        .SetFont(new Font("宋体", 14)),
+                    FieldGenFactory.GetBarcode().At(0, 50).WithData("20161104090000").SetBarcodeType(BarcodeType.Code128).
+                        SetFont("D", FieldOrientation.Normal, 18).BarWidth(1).Height(40).Centered(_labelWidth))
+                    .ToString();
+
+            RawPrinterHelper.SendStringToPrinter("ZDesigner GK888t", zpl);
         }
 
         [TearDown]
@@ -48,7 +67,7 @@ namespace ZebraTests
 
         }
 
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public void TearDownAfterAllTests()
         {
 

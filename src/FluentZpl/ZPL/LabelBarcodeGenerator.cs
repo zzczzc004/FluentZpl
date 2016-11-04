@@ -2,8 +2,6 @@ using System;
 
 namespace ZplLabels.ZPL
 {
-    using ZplLabels.ZPL;
-
     public class LabelBarcodeGenerator : FieldGenerator
     { 
         private BarcodeType _barcodeType = BarcodeType.Code128;
@@ -13,7 +11,7 @@ namespace ZplLabels.ZPL
         private int _height;
         private int _totalDots;
 
-        public   LabelBarcodeGenerator SetBarcodeType(BarcodeType type)
+        public LabelBarcodeGenerator SetBarcodeType(BarcodeType type)
         {
             _barcodeType = type;
             return this;
