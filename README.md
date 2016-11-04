@@ -36,4 +36,4 @@ The ZplLabel.Load() method takes an array of IFieldGenerator objects as paramete
                 
 The "ToString()" method produces the following script.
 
-![PreviewBarCode](/docs/images/preview-barcode.png)
+![PreviewBarCode](https://github.com/zzczzc004/FluentZpl/blob/master/docs/images/preview-barcode.PNG)
